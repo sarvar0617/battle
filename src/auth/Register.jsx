@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { api } from "./api/Api";
+import { api } from "../api/Api";
 
 const Register = () => {
   const [name, setName] = useState("");
