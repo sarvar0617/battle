@@ -4,6 +4,7 @@ import { api } from "./api/Api";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 const Profile = () => {
   const [profile, setProfile] = useState("");
+  const [loading, setLoading] = useState(true);
   const handleCopy = () => {
     navigator.clipboard.writeText(profile.username);
     console.log(profile.username);
@@ -22,16 +23,21 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+        setLoading(true);
       try {
         const res = await api.get("/auth");
         setProfile(res.data);
       } catch (error) {
         console.error("Error fetching search results:", error);
+      }finally{
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
+  if (loading || !profile)
+    return <h1 className="text-white text-5xl font-semibold">Loading...</h1>;
   return (
     <div className="w-400 mx-auto mt-5 bg-white shadow  h-100 rounded-xl">
       <div className="flex justify-between items-center p-5">

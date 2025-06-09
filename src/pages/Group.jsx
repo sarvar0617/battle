@@ -7,25 +7,33 @@ import { api } from "../api/Api";
 
 const Group = () => {
   const { id } = useParams();
-  const [myGroup, setMyGroup] = useState([]);
+  const [myGroup, setMyGroup] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await api.get(`/groups/${id}`);
-        console.log(res.data);
-        setMyGroup(res.data);
+        setLoading(true);
+        setMyGroup(null);
+        const res = await api.get(`/groups`);
+        const foundGroup = res.data.find((g) => g._id === id); // id bo‘yicha guruhni topamiz
+
+        setMyGroup(foundGroup); // topilgan guruhni saqlaymiz
       } catch (error) {
-        console.error("❌ Error fetching group:", error);
+        console.error("❌ Guruhni olishda xatolik yuz berdi:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
   }, [id]);
 
+  if (loading || !myGroup)
+    return <h1 className="text-white text-5xl font-semibold">Loading...</h1>;
   return (
     <div className="min-h-screen w-full bg-cover bg-center p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <h1 className="text-3xl font-bold text-white mb-6">ewds</h1>
+        <h1 className="text-3xl font-bold text-white mb-6">{myGroup.name}</h1>
 
         {/* Sections Container */}
         <div className="flex flex-col md:flex-row gap-6">
@@ -64,7 +72,6 @@ const Group = () => {
               <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">
                 I
               </div>
-              {console.log(myGroup)}
               <div>
                 <div className="font-semibold">Ismatov</div>
                 <div className="text-sm text-gray-500">Sarvar_06.17</div>
