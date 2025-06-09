@@ -14,6 +14,7 @@ const Header = () => {
         const res = await api.get(
           `/groups/search?q=${encodeURIComponent(search)}`
         );
+        console.log(res.data);
 
         if (Array.isArray(res.data)) {
           setResults(res.data);
